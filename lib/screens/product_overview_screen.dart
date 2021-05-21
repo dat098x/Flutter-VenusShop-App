@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:venusshop/providers/cart.dart';
 import 'package:venusshop/screens/cart_screen.dart';
+import 'package:venusshop/widgets/app_drawer.dart';
 import 'package:venusshop/widgets/badget.dart';
 import 'package:venusshop/widgets/products_grip.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           )
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductsGrid(showFavoriteOnly),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:venusshop/providers/products_data.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,38 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(productLoaded.title),
       ),
-      body: Container(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [Container(
+            height: 300,
+            width: double.infinity,
+            child: Image.network(productLoaded.imageUrl, fit: BoxFit.cover,),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+            Text('\$${productLoaded.price}',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 20
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text(productLoaded.description,
+                style: TextStyle(
+                ),
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            )
+          ]
+        ),
+      ),
     );
   }
 }
