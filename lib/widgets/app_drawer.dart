@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:venusshop/screens/orders_screen.dart';
+import 'package:venusshop/screens/user_products_screen.dart';
 
 
 
@@ -24,6 +25,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.favorite),
             title: Text('Orders'),
             onTap: () => Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName),
+          ),
+          ListTile(
+            leading: Icon(Icons.verified_user),
+            title: Text('Products Manager'),
+            onTap: () => Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName),
           )
         ],
       ),
