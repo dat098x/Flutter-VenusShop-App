@@ -18,6 +18,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     return Dismissible(
       key: ValueKey(id),
       background: Container(
@@ -45,8 +46,15 @@ class CartItem extends StatelessWidget {
               ],
             ));
       },
-      onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeItem(productId);
+      onDismissed: (direction) async {
+        try {
+          await Provider.of<Cart>(context, listen: false).removeItem(productId);
+        } catch (error) {
+          scaffoldMessenger.showSnackBar(SnackBar(
+            content: Text('Delete Failed', textAlign: TextAlign.center,),
+          ));
+        }
+
       },
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
@@ -61,7 +69,21 @@ class CartItem extends StatelessWidget {
             ),
             title: Text(title),
             subtitle: Text('Total: \$${(price * quantity)}'),
-            trailing: Text('$quantity x'),
+            trailing: FittedBox(
+              child: Row(
+                children: [
+                  IconButton(icon: Icon(Icons.remove), onPressed: () {
+                    Provider.of<Cart>(context, listen: false).removeSingleItem(productId);
+                  }),
+                  SizedBox(width: 4,),
+                  Text('$quantity x'),
+                  SizedBox(width: 4,),
+                  IconButton(icon: Icon(Icons.add), onPressed: () {
+                    Provider.of<Cart>(context, listen: false).increaseItem(productId);
+                  })
+                ],
+              ),
+            ),
           ),
         ),
       ),

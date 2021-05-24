@@ -31,17 +31,7 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                     backgroundColor: Theme.of(context).primaryColor,),
-                  TextButton(
-                    child: Text('ORDER NOW'),
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(cart.items.values.toList(), cart.totalAmount);
-                      cart.clear();
-                      Navigator.of(context).pushNamed(OrdersScreen.routeName);
-                    },
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)
-                    ),
-                  )
+                  OrderButton(cart: cart)
                 ],
               ),
             ),
@@ -61,6 +51,52 @@ class CartScreen extends StatelessWidget {
             )
           )
         ],
+      ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoanding = false;
+  bool isEnable() {
+    if (widget.cart.countItems  <= 0 || _isLoanding) {
+      return false;
+    }
+    return true;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      child: _isLoanding ? CircularProgressIndicator() : Text('ORDER NOW'),
+      onPressed: !isEnable()
+          ? null
+          : () async {
+        setState(() {
+          _isLoanding = true;
+        });
+        await Provider.of<Orders>(context, listen: false).addOrder(widget.cart.items.values.toList(), widget.cart.totalAmount);
+        setState(() {
+          _isLoanding = false;
+        });
+        widget.cart.clear();
+        //Navigator.of(context).pushNamed(OrdersScreen.routeName);
+      },
+      style: ButtonStyle(
+        foregroundColor: isEnable()
+            ? MaterialStateProperty.all(Theme.of(context).primaryColor)
+            : MaterialStateProperty.all(Theme.of(context).disabledColor)
       ),
     );
   }

@@ -6,7 +6,7 @@ import 'package:venusshop/screens/cart_screen.dart';
 import 'package:venusshop/screens/edit_product_screen.dart';
 import 'package:venusshop/screens/orders_screen.dart';
 import 'package:venusshop/screens/product_detail_screen.dart';
-import 'package:venusshop/screens/product_overview_screen.dart';
+import 'package:venusshop/screens/products_overview_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:venusshop/screens/user_products_screen.dart';
 
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => ProductOverviewScreen(),
+          '/': (context) => ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
           CartScreen.routeName: (context) => CartScreen(),
           OrdersScreen.routeName: (context) => OrdersScreen(),

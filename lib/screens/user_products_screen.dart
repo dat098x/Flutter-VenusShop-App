@@ -7,6 +7,11 @@ import 'package:venusshop/widgets/user_product_item.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = 'user-products';
+  
+  Future<void> _refreshProduct(BuildContext context) async {
+    print('Here');
+    await Provider.of<ProductsData>(context, listen: false).fetchAndSetProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +28,23 @@ class UserProductsScreen extends StatelessWidget {
               })
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: ListView.builder(
-            itemCount: productsData.items.length,
-            itemBuilder: (context, index) => Column(
-              children: [
-                UserProductItem(
-                  id: productsData.items[index].id,
-                  title: productsData.items[index].title,
-                  imageUrl: productsData.items[index].imageUrl,
-                ),
-                Divider()
-              ],
-            ))
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProduct(context),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: ListView.builder(
+              itemCount: productsData.items.length,
+              itemBuilder: (context, index) => Column(
+                children: [
+                  UserProductItem(
+                    id: productsData.items[index].id,
+                    title: productsData.items[index].title,
+                    imageUrl: productsData.items[index].imageUrl,
+                  ),
+                  Divider()
+                ],
+              ))
+        ),
       ),
     );
   }

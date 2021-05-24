@@ -29,7 +29,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _form = GlobalKey<FormState>();
 
   var _isInit = true;
-
+  var _isLoading = false;
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
@@ -79,16 +79,35 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) return;
     _form.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
     if (_editedProduct.id != null) {
       Provider.of<ProductsData>(context, listen: false).updateProduct(_editedProduct);
     } else {
-      Provider.of<ProductsData>(context, listen: false).addProduct(_editedProduct);
+      try {
+        await Provider.of<ProductsData>(context, listen: false).addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred'),
+            content: Text('Something went wrong.'),
+            actions: [
+              TextButton(onPressed: (){
+                Navigator.of(ctx).pop();
+              }, child: Text('Okay'))
+            ],
+          ),
+        );
+      }
     }
-
+    setState(() {
+      _isLoading = false;
+    });
     Navigator.of(context).pop();
   }
 
@@ -103,7 +122,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           )
         ],
       ),
-      body: Padding(
+      body: _isLoading ? Center(child: CircularProgressIndicator(),) : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _form,
@@ -247,8 +266,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   )
                 ],
               )
+              ,
             ],
           ),
+
         ),
       ),
     );
