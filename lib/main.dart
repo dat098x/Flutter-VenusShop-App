@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:venusshop/helpers/custom_route.dart';
 import 'package:venusshop/providers/auth.dart';
 import 'package:venusshop/providers/cart.dart';
 import 'package:venusshop/providers/orders.dart';
@@ -54,7 +55,12 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.purple,
             accentColor: Colors.orangeAccent,
             fontFamily: 'Lato',
-
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransitionBuilder(),
+                TargetPlatform.iOS: CustomPageTransitionBuilder(),
+              },
+            )
           ),
           home: auth.isAuth()
               ? ProductsOverviewScreen()

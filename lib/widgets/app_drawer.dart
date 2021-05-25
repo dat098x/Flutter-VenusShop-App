@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:venusshop/helpers/custom_route.dart';
 import 'package:venusshop/providers/auth.dart';
+import 'package:venusshop/screens/auth_screen.dart';
 import 'package:venusshop/screens/orders_screen.dart';
 import 'package:venusshop/screens/products_overview_screen.dart';
 import 'package:venusshop/screens/user_products_screen.dart';
@@ -40,7 +42,9 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.exit_to_app),
             title: Text('Log out'),
             onTap: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(CustomRoute(
+                builder: (context) => AuthScreen(),
+              ));
               Provider.of<Auth>(context, listen: false).logout();
             }
           )

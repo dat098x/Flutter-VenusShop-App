@@ -104,15 +104,17 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  void logout() {
+  void logout() async {
     _token = null;
     _userId = null;
     if (_authTimer != null) {
       _authTimer.cancel();
       _authTimer = null;
     }
+    await FirebaseAuth.instance.signOut();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     notifyListeners();
-    FirebaseAuth.instance.signOut();
   }
 
   void _autoLogout() {
