@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:venusshop/providers/products_data.dart';
+import 'package:venusshop/providers/products.dart';
 import 'package:venusshop/screens/edit_product_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(icon: Icon(Icons.delete, color: Theme.of(context).errorColor,),
                 onPressed: () async {
                     try {
-                      await Provider.of<ProductsData>(context, listen: false).deleteProduct(id);
+                      await Provider.of<Products>(context, listen: false).deleteProduct(id);
                     } catch (error) {
                       scaffoldMessenger.showSnackBar(SnackBar(
                           content: Text('Delete Failed', textAlign: TextAlign.center,)));

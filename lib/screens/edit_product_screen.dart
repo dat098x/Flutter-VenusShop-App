@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:venusshop/providers/product.dart';
 import 'package:provider/provider.dart';
-import 'package:venusshop/providers/products_data.dart';
+import 'package:venusshop/providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -41,7 +41,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_isInit) {
       final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
-        _editedProduct = Provider.of<ProductsData>(context).findById(productId);
+        _editedProduct = Provider.of<Products>(context).findById(productId);
         _initValues = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
@@ -87,10 +87,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
     });
     if (_editedProduct.id != null) {
-      Provider.of<ProductsData>(context, listen: false).updateProduct(_editedProduct);
+      Provider.of<Products>(context, listen: false).updateProduct(_editedProduct);
     } else {
       try {
-        await Provider.of<ProductsData>(context, listen: false).addProduct(_editedProduct);
+        await Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
       } catch (error) {
         await showDialog(context: context,
           builder: (ctx) => AlertDialog(

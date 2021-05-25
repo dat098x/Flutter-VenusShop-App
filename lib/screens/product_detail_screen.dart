@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:venusshop/providers/products_data.dart';
+import 'package:venusshop/providers/products.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -9,7 +9,7 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context).settings.arguments as String;
-    final productLoaded = Provider.of<ProductsData>(context, listen: false).findById(productId);
+    final productLoaded = Provider.of<Products>(context, listen: false).findById(productId);
     return Scaffold(
       appBar: AppBar(
         title: Text(productLoaded.title),

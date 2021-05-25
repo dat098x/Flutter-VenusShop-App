@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:venusshop/providers/auth.dart';
 import 'package:venusshop/providers/cart.dart';
 import 'package:venusshop/providers/product.dart';
 import 'package:venusshop/screens/product_detail_screen.dart';
@@ -8,6 +9,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
     final cart = Provider.of<Cart>(context);
+    final auth = Provider.of<Auth>(context);
     return  ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Card(
@@ -28,7 +30,7 @@ class ProductItem extends StatelessWidget {
                       icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
                       color: Theme.of(context).accentColor,
                       onPressed: () {
-                        product.toggleFavoriteStatus();
+                        product.toggleFavoriteStatus(auth.token, auth.userId);
                     },
                   ),
               ),

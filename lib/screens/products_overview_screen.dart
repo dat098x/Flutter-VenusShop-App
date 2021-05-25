@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:venusshop/providers/cart.dart';
-import 'package:venusshop/providers/products_data.dart';
+import 'package:venusshop/providers/products.dart';
 import 'package:venusshop/screens/cart_screen.dart';
 import 'package:venusshop/widgets/app_drawer.dart';
 import 'package:venusshop/widgets/badget.dart';
 import 'package:venusshop/widgets/products_grip.dart';
 import 'package:provider/provider.dart';
-
 
 enum FilterOptions {
   Favorites,
@@ -14,6 +13,7 @@ enum FilterOptions {
 }
 
 class ProductsOverviewScreen extends StatefulWidget {
+  static const routeName = '/products-overview';
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
@@ -29,8 +29,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Cart>(context).fecthAndSetCart();
-      Provider.of<ProductsData>(context).fetchAndSetProducts().then((_) {
+      //Provider.of<Cart>(context).fecthAndSetCart();
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -39,6 +39,12 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     _isInit = false;
     super.didChangeDependencies();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +59,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                   _showOnlyFavorites = true;
                 } else {
                   _showOnlyFavorites = false;
+
                 }
               });
             },

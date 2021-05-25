@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "122607438195",
+    "firebase_url": "https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "venus-shop-5da71",
+    "storage_bucket": "venus-shop-5da71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122607438195:android:6818f2928ac1e24be55d06",
+        "android_client_info": {
+          "package_name": "com.example.venusshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122607438195-2t9qi015mlrnoq5c0hmdvvfisolk1k85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfZ6Elqwz3Tav6toVVc9__MdodW8svuiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122607438195-2t9qi015mlrnoq5c0hmdvvfisolk1k85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

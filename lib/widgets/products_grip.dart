@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:venusshop/providers/products_data.dart';
+import 'package:venusshop/providers/products.dart';
 import 'package:venusshop/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsData = Provider.of<ProductsData>(context);
+    final productsData = Provider.of<Products>(context);
     final products = showFavoriteOnly ? productsData.favoriteItems : productsData.items;
     return GridView.builder(
         padding: const EdgeInsets.all(10),

@@ -24,8 +24,12 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  final String userToken;
+  final String userId;
+  Orders(this.userToken,this.userId, this._orders);
+
   Future<void> fetchAndSetOrders() async {
-    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json');
+    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/orders/$userId.json?auth=$userToken');
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
     final extractedOrder = jsonDecode(response.body) as Map<String, dynamic>;
@@ -48,7 +52,7 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json');
+    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/orders/$userId.json?auth=$userToken');
     final timestamp = DateTime.now();
     final response = await http.post(url, body: jsonEncode({
       'amount': total,

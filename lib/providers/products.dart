@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:venusshop/models/http_exception.dart';
 import 'package:venusshop/providers/product.dart';
 import 'package:http/http.dart' as http;
-class ProductsData  extends ChangeNotifier {
+class Products  extends ChangeNotifier {
   List<Product> _items =[
     // Product(
     //   id: 'p1',
@@ -42,6 +42,11 @@ class ProductsData  extends ChangeNotifier {
 
   // var _showFavoriteOnly = false;
   //
+  final String userToken;
+  final String userId;
+
+  Products(this.userToken, this.userId, this._items);
+
   List<Product> get items{
     // if (_showFavoriteOnly) {
     //   return _items.where((item) => item.isFavorite).toList();
@@ -57,38 +62,42 @@ class ProductsData  extends ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future<void> fetchAndSetProducts() async{
-    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async{
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    var url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${userToken}&${filterString}');
     try {
       final response = await http.get(url);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       if (extractedData == null) return;
+      url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/userFavorite/${userId}.json?auth=$userToken');
+      final favoriteResponse = await http.get(url);
+      final favoriteData = jsonDecode(favoriteResponse.body);
       extractedData.forEach((productId, productData) {
         loadedProducts.add(Product(
             id: productId,
             title: productData['title'],
             description: productData['description'],
             price: productData['price'],
-            isFavorite: productData['isFavorite'],
+            isFavorite: favoriteData == null ? false : favoriteData[productId] ?? false,
             imageUrl: productData['imageUrl']));
       });
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      throw error;
+      print(error);
     }
   }
 
   Future<void> addProduct(Product product) async{
     try {
-      var url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products.json');
+      var url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=$userToken');
       final response = await http.post(url, body: jsonEncode({
         'title': product.title,
         'price': product.price,
         'description': product.description,
         'imageUrl': product.imageUrl,
-        'isFavorite': product.isFavorite
+        'creatorId': userId,
       }));
       final newProduct = Product(
           title: product.title,
@@ -110,7 +119,7 @@ class ProductsData  extends ChangeNotifier {
   Future<void> updateProduct(Product newProduct) async {
     final productIndex = _items.indexWhere((product) => product.id == newProduct.id);
     if (productIndex >= 0) {
-      final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products/${newProduct.id}.json');
+      final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products/${newProduct.id}.json?auth=$userToken');
       await http.patch(url, body: jsonEncode({
         'title': newProduct.title,
         'price': newProduct.price,
@@ -125,7 +134,7 @@ class ProductsData  extends ChangeNotifier {
   }
   
   Future<void> deleteProduct(String id) async {
-    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json');
+    final url = Uri.parse('https://venus-shop-5da71-default-rtdb.asia-southeast1.firebasedatabase.app/products/${id}.json?auth=$userToken');
     final existingProductIndex = _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
